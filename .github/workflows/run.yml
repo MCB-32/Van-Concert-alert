@@ -25,7 +25,7 @@ jobs:
       - name: Run script
         run: python script.py
 
-      - n- name: Commit updated events.json
+      - name: Commit updated events.json
   run: |
     git config --global user.name "bot"
     git config --global user.email "bot@github.com"
