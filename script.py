@@ -2,13 +2,37 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import hashlib
+from playwright.sync_api import sync_playwright
 
 URL = "https://admitone.com/events/vancouver/pro/concerts"  # confirm this is still correct
 
 def get_events():
-    res = requests.get(URL)
-    soup = BeautifulSoup(res.text, "html.parser")
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(URL)
 
+        page.wait_for_timeout(5000)
+
+        html = page.content()
+        browser.close()
+
+    soup = BeautifulSoup(html, "html.parser")
+
+    events = []
+
+    for item in soup.select("a"):
+        text = item.get_text(strip=True)
+
+        if len(text) > 20:
+            event_id = hashlib.md5(text.encode()).hexdigest()
+
+            events.append({
+                "id": event_id,
+                "title": text
+            })
+
+    return events
     events = []
 
     for item in soup.select(".event"):  # selector may need adjusting
