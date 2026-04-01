@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import json
 import hashlib
 
-URL = "https://mrglive.com/events/"  # confirm this is still correct
+URL = "https://admitone.com/events/vancouver/pro/concerts"  # confirm this is still correct
 
 def get_events():
     res = requests.get(URL)
